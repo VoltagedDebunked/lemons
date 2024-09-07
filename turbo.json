@@ -1,0 +1,59 @@
+﻿{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+      "cache": {
+        "enabled": true,
+        "type": "filesystem",
+        "compression": "gzip",
+        "ttl": "1d"
+      },
+      "inputs": ["src/**", "package.json", "tsconfig.json"]
+    },
+    "lint": {
+      "cache": {
+        "enabled": true,
+        "type": "filesystem",
+        "compression": "gzip",
+        "ttl": "1d"
+      },
+      "inputs": ["src/**/*.ts", ".eslintrc.json", "package.json"]
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": ["coverage/**"],
+      "cache": {
+        "enabled": true,
+        "type": "filesystem",
+        "compression": "gzip",
+        "ttl": "1d"
+      },
+      "inputs": ["src/**/*.ts", "tests/**", "package.json"]
+    },
+    "clean": {
+      "dependsOn": ["build"],
+      "outputs": []
+    }
+  },
+  "globalDependencies": ["tsconfig.json", "package.json"],
+  "cache": {
+    "enabled": true,
+    "type": "filesystem",
+    "compression": "gzip",
+    "ttl": "1d"
+  },
+  "reporting": {
+    "enabled": true,
+    "level": "info"
+  },
+  "parallel": {
+    "enabled": true,
+    "maxConcurrency": 4
+  },
+  "scheduler": {
+    "enabled": true,
+    "strategy": "adaptive"
+  }
+}
